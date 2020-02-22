@@ -17,7 +17,6 @@ class Maps:
         self.maps = "map.png"
         self.image_map()
 
-
     def find_coords(self):
         geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
         geocoder_params = {
