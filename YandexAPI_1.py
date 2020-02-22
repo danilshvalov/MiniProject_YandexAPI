@@ -1,19 +1,22 @@
 import sys
 import os
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel
-from PyQt5.QtGui import QPixmap, QFont
+from PyQt5.QtGui import QPixmap, QFont, QImage
 from PyQt5 import uic, QtCore
 import requests
 from PIL import Image
+from io import BytesIO
 
 
 class Maps:
     def __init__(self):
+        self.width_map, self.height_map = 650, 450
         self.toponym_to_find = "Владивосток"
         self.delta = 0.01
         self.find_coords()
         self.maps = "map.png"
         self.image_map()
+
 
     def find_coords(self):
         geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
@@ -32,23 +35,28 @@ class Maps:
         map_params = {
             "ll": self.coords,
             "spn": ','.join([str(self.delta), str(self.delta)]),
-            "l": "map",
+            "l": "sat",
+            'size': f'{self.width_map},{self.height_map}'
         }
         response_api = requests.get(map_api_server, params=map_params)
         if not response_api:
             raise Exception
 
-        with open(self.maps, "wb") as file:
-            file.write(response_api.content)
-            file.close()
+        self.maps = Image.open(BytesIO(response_api.content)).convert('RGBX').tobytes()
+        return self.maps
 
 
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('main.ui', self)
+        self.width_map, self.height_map = 650, 450
+        self.setGeometry(100, 100, self.width_map, self.height_map)
         self.maps_api = Maps()
-        self.label.setPixmap(QPixmap(self.maps_api.maps))
+        map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
+        self.label.setPixmap((QPixmap.fromImage(map_image)))
+        self.label.resize(650, 450)
+        self.label.move(0, 0)
 
 
 app = QApplication(sys.argv)
