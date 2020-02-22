@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QLabel
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5 import uic, QtCore
 import requests
+from PIL import Image
 
 
 class Maps:
@@ -36,6 +37,7 @@ class Maps:
         response_api = requests.get(map_api_server, params=map_params)
         if not response_api:
             raise Exception
+
         with open(self.maps, "wb") as file:
             file.write(response_api.content)
             file.close()
@@ -46,8 +48,7 @@ class MyWidget(QMainWindow):
         super().__init__()
         uic.loadUi('main.ui', self)
         self.maps_api = Maps()
-        self.pixmap = QPixmap(self.maps_api.maps)
-        self.label.setPixmap(self.pixmap)
+        self.label.setPixmap(QPixmap(self.maps_api.maps))
 
 
 app = QApplication(sys.argv)
