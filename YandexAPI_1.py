@@ -68,8 +68,6 @@ class MyWidget(QMainWindow):
         elif e.key() == QtCore.Qt.Key_PageDown:
             self.maps_api.map_moving("pg_down")
             self.update_image()
-        else:
-            super(MyWidget, self).keyPressEvent(e)
 
     def update_image(self):
         map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
