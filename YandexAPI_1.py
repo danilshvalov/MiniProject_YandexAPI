@@ -23,6 +23,18 @@ class MyWidget(QMainWindow):
         elif e.key() == QtCore.Qt.Key_PageDown:
             self.maps_api.map_moving("pg_down")
             self.update_image()
+        elif e.key() == QtCore.Qt.Key_W:
+            self.maps_api.map_moving("up")
+            self.update_image()
+        elif e.key() == QtCore.Qt.Key_S:
+            self.maps_api.map_moving("down")
+            self.update_image()
+        elif e.key() == QtCore.Qt.Key_D:
+            self.maps_api.map_moving("right")
+            self.update_image()
+        elif e.key() == QtCore.Qt.Key_A:
+            self.maps_api.map_moving("left")
+            self.update_image()
 
     def update_image(self):
         map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)

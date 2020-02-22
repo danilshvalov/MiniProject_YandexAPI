@@ -20,13 +20,13 @@ class Maps:
         response_geo = requests.get(geocoder_api_server, params=geocoder_params)
         if not response_geo:
             raise Exception
-        self.coords = ','.join(response_geo.json()["response"]["GeoObjectCollection"]
-                               ["featureMember"][0]["GeoObject"]["Point"]["pos"].split())
+        self.coords = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split()
+        self.coords = [float(i) for i in self.coords]
 
     def image_map(self):
         map_api_server = "http://static-maps.yandex.ru/1.x/"
         map_params = {
-            "ll": self.coords,
+            "ll": ','.join([str(self.coords[0]), str(self.coords[1])]),
             "z": str(self.delta),
             "l": "sat",
             'size': f'{self.width_map},{self.height_map}'
@@ -41,5 +41,11 @@ class Maps:
             self.delta += 1
         elif way == "pg_down" and self.delta != 0:
             self.delta -= 1
-        self.find_coords()
-        self.image_map()
+        elif way == 'up':
+            self.coords[1] = self.coords[1] + 0.00001 * self.height_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
+        elif way == 'down':
+            self.coords[1] = self.coords[1] - 0.00001 * self.height_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
+        elif way == 'right':
+            self.coords[0] = self.coords[0] + 0.00001 * self.width_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
+        elif way == 'left':
+            self.coords[0] = self.coords[0] - 0.00001 * self.width_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
