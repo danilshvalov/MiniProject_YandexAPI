@@ -41,6 +41,14 @@ class Maps:
             raise Exception
         return Image.open(BytesIO(response_api.content)).convert('RGBX').tobytes()
 
+    def map_moving(self, way):
+        if way == "pg_up" and self.delta != 17:
+            self.delta += 1
+        elif way == "pg_down" and self.delta != 0:
+            self.delta -= 1
+        self.find_coords()
+        self.image_map()
+
 
 class MyWidget(QMainWindow):
     def __init__(self):
@@ -53,6 +61,20 @@ class MyWidget(QMainWindow):
         self.label.setPixmap((QPixmap.fromImage(map_image)))
         self.label.resize(650, 450)
         self.label.move(0, 0)
+
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_PageUp:
+            self.maps_api.map_moving("pg_up")
+            self.update_image()
+        elif e.key() == QtCore.Qt.Key_PageDown:
+            self.maps_api.map_moving("pg_down")
+            self.update_image()
+        else:
+            super(MyWidget, self).keyPressEvent(e)
+
+    def update_image(self):
+        map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
+        self.label.setPixmap((QPixmap.fromImage(map_image)))
 
 
 app = QApplication(sys.argv)
