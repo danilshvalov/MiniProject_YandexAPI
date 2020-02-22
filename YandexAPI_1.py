@@ -12,7 +12,7 @@ class Maps:
     def __init__(self):
         self.width_map, self.height_map = 650, 450
         self.toponym_to_find = "Владивосток"
-        self.delta = 0.01
+        self.delta = 17
         self.find_coords()
         self.maps = "map.png"
         self.image_map()
@@ -33,7 +33,7 @@ class Maps:
         map_api_server = "http://static-maps.yandex.ru/1.x/"
         map_params = {
             "ll": self.coords,
-            "spn": ','.join([str(self.delta), str(self.delta)]),
+            "z": str(self.delta),
             "l": "sat",
             'size': f'{self.width_map},{self.height_map}'
         }
