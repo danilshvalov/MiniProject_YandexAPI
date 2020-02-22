@@ -57,8 +57,7 @@ class MyWidget(QMainWindow):
         self.width_map, self.height_map = 650, 450
         self.setGeometry(100, 100, self.width_map, self.height_map)
         self.maps_api = Maps()
-        map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
-        self.label.setPixmap((QPixmap.fromImage(map_image)))
+        self.update_image()
         self.label.resize(650, 450)
         self.label.move(0, 0)
 
