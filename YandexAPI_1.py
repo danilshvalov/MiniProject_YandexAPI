@@ -14,7 +14,6 @@ class Maps:
         self.toponym_to_find = "Владивосток"
         self.delta = 17
         self.find_coords()
-        self.maps = "map.png"
         self.image_map()
 
     def find_coords(self):
@@ -40,9 +39,7 @@ class Maps:
         response_api = requests.get(map_api_server, params=map_params)
         if not response_api:
             raise Exception
-
-        self.maps = Image.open(BytesIO(response_api.content)).convert('RGBX').tobytes()
-        return self.maps
+        return Image.open(BytesIO(response_api.content)).convert('RGBX').tobytes()
 
 
 class MyWidget(QMainWindow):
