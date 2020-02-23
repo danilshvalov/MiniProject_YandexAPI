@@ -8,6 +8,7 @@ class Maps:
         self.width_map, self.height_map = 650, 450
         self.toponym_to_find = "Владивосток"
         self.mapstyle = 'map'
+        self.point = ''
         self.delta = 17
         self.find_coords()
         self.image_map()
@@ -30,7 +31,8 @@ class Maps:
             "ll": ','.join([str(self.coords[0]), str(self.coords[1])]),
             "z": str(self.delta),
             "l": self.mapstyle,
-            'size': f'{self.width_map},{self.height_map}'
+            'size': f'{self.width_map},{self.height_map}',
+            "pt": self.point
         }
         response_api = requests.get(map_api_server, params=map_params)
         if not response_api:
@@ -50,3 +52,8 @@ class Maps:
             self.coords[0] = self.coords[0] + 0.000010688212998736789 * self.width_map * 2 ** (17 - self.delta)
         elif way == 'left':
             self.coords[0] = self.coords[0] - 0.000010688212998736789 * self.width_map * 2 ** (17 - self.delta)
+
+    def find_object(self, object):
+        self.toponym_to_find = object
+        self.find_coords()
+        self.point = ','.join([str(self.coords[0]), str(self.coords[1]), 'flag'])
