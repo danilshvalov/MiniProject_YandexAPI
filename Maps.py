@@ -25,6 +25,10 @@ class Maps:
         self.coords = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split()
         self.coords = [float(i) for i in self.coords]
         self.address = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]["formatted"]
+        if "postal_code" in  response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]:
+            self.postal_code = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]["postal_code"]
+        else:
+            self.postal_code = ''
 
     def image_map(self):
         map_api_server = "http://static-maps.yandex.ru/1.x/"

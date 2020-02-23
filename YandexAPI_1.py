@@ -21,6 +21,7 @@ class MyWidget(QMainWindow):
         self.button_sklsat.clicked.connect(self.change_mapstyle)
         self.button_find.clicked.connect(self.find_object)
         self.button_cancel.clicked.connect(self.cancel_find)
+        self.postal_code_button.clicked.connect(self.postal_code)
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_PageUp:
@@ -59,12 +60,22 @@ class MyWidget(QMainWindow):
         if self.find_text.text():
             self.maps_api.find_object(self.find_text.text())
             self.update_image()
-        self.address.setText(self.maps_api.address)
+            if self.postal_code_button.isChecked() is True:
+                self.address.setText(', '.join([self.maps_api.address, self.maps_api.postal_code]))
+            else:
+                self.address.setText(self.maps_api.address)
 
     def cancel_find(self):
         self.maps_api.point = ''
         self.update_image()
         self.address.setText('')
+
+    def postal_code(self):
+        if self.find_text.text():
+            if self.postal_code_button.isChecked() is True:
+                self.address.setText(', '.join([self.maps_api.address, self.maps_api.postal_code]))
+            else:
+                self.address.setText(self.maps_api.address)
 
 
 app = QApplication(sys.argv)
