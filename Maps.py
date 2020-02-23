@@ -78,3 +78,7 @@ class Maps:
         else:
             self.postal_code = ''
 
+    def set_point(self, x, y):
+        self.x = self.coords[0] + 0.000010688212998736789 * x * 2 ** (17 - self.delta)
+        self.y = self.coords[1] - 0.000007988506000377322 * y * 2 ** (17 - self.delta)
+
