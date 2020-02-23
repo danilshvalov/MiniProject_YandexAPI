@@ -10,7 +10,7 @@ class MyWidget(QMainWindow):
         super().__init__()
         uic.loadUi('main.ui', self)
         self.width_map, self.height_map = 650, 450
-        self.setGeometry(100, 100, self.width_map, self.height_map)
+        self.setGeometry(100, 100, self.width_map, self.height_map + 120)
         self.maps_api = Maps()
         self.update_image()
         self.label.resize(650, 450)
@@ -59,10 +59,12 @@ class MyWidget(QMainWindow):
         if self.find_text.text():
             self.maps_api.find_object(self.find_text.text())
             self.update_image()
+        self.address.setText(self.maps_api.address)
 
     def cancel_find(self):
         self.maps_api.point = ''
         self.update_image()
+        self.address.setText('')
 
 
 app = QApplication(sys.argv)

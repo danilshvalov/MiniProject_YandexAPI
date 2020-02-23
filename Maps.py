@@ -24,6 +24,7 @@ class Maps:
             raise Exception
         self.coords = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split()
         self.coords = [float(i) for i in self.coords]
+        self.address = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]["formatted"]
 
     def image_map(self):
         map_api_server = "http://static-maps.yandex.ru/1.x/"
