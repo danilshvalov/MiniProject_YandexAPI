@@ -96,7 +96,7 @@
       <x>50</x>
       <y>309</y>
       <width>571</width>
-      <height>41</height>
+      <height>46</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -122,6 +122,21 @@
        </property>
        <property name="text">
         <string>Найти</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="button_cancel">
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Отменить</string>
        </property>
       </widget>
      </item>

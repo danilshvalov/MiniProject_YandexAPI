@@ -20,6 +20,7 @@ class MyWidget(QMainWindow):
         self.button_sat.clicked.connect(self.change_mapstyle)
         self.button_sklsat.clicked.connect(self.change_mapstyle)
         self.button_find.clicked.connect(self.find_object)
+        self.button_cancel.clicked.connect(self.cancel_find)
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_PageUp:
@@ -58,6 +59,10 @@ class MyWidget(QMainWindow):
         if self.find_text.text():
             self.maps_api.find_object(self.find_text.text())
             self.update_image()
+
+    def cancel_find(self):
+        self.maps_api.point = ''
+        self.update_image()
 
 
 app = QApplication(sys.argv)
