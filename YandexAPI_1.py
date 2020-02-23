@@ -55,6 +55,12 @@ class MyWidget(QMainWindow):
             self.maps_api.point = ','.join([str(self.maps_api.x), str(self.maps_api.y), 'flag'])
             self.find_point()
             self.update_image()
+        elif event.button() == QtCore.Qt.RightButton:
+            self.maps_api.set_point(event.pos().x() - self.width_map // 2, event.pos().y() - self.height_map // 2)
+            self.maps_api.point = ','.join([str(self.maps_api.x), str(self.maps_api.y), 'flag'])
+            self.maps_api.organization()
+            self.find_text.setText('')
+            self.address.setText(self.maps_api.info)
 
     def update_image(self):
         map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)

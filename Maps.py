@@ -1,6 +1,7 @@
 import requests
 from PIL import Image
 from io import BytesIO
+from find_distance import lonlat_distance
 
 
 class Maps:
@@ -81,4 +82,25 @@ class Maps:
     def set_point(self, x, y):
         self.x = self.coords[0] + 0.000010688212998736789 * x * 2 ** (17 - self.delta)
         self.y = self.coords[1] - 0.000007988506000377322 * y * 2 ** (17 - self.delta)
+
+    def organization(self):
+        self.find_point()
+        search_api_server = "https://search-maps.yandex.ru/v1/"
+        api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
+        search_params = {
+            "apikey": api_key,
+            "text": self.address,
+            "lang": "ru_RU",
+            "ll": self.point[:-5],
+            "type": "biz"
+        }
+        response_search = requests.get(search_api_server, params=search_params)
+        if not response_search:
+            pass
+        info_organization = response_search.json()["features"][1]
+        if lonlat_distance([float(i) for i in self.point[:-5].split(',')],
+                           info_organization["geometry"]["coordinates"]) <= 50:
+            self.info = info_organization["properties"]["name"]
+        else:
+            self.info = 'Организаций не найдено'
 
