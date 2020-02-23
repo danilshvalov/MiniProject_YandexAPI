@@ -62,3 +62,19 @@ class Maps:
         self.toponym_to_find = object
         self.find_coords()
         self.point = ','.join([str(self.coords[0]), str(self.coords[1]), 'flag'])
+
+    def find_point(self):
+        geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+        geocoder_params = {
+            "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
+            "geocode": self.point[:-5],
+            "format": "json"}
+        response_geo = requests.get(geocoder_api_server, params=geocoder_params)
+        if not response_geo:
+            raise Exception
+        self.address = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]["formatted"]
+        if "postal_code" in response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]:
+            self.postal_code = response_geo.json()["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["metaDataProperty"]["GeocoderMetaData"]["Address"]["postal_code"]
+        else:
+            self.postal_code = ''
+

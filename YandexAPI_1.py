@@ -25,6 +25,7 @@ class MyWidget(QMainWindow):
         self.button_find.clicked.connect(self.find_object)
         self.button_cancel.clicked.connect(self.cancel_find)
         self.postal_code_button.clicked.connect(self.postal_code)
+        self.label.mousePressEvent = self.getPixel
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_PageUp:
@@ -48,6 +49,14 @@ class MyWidget(QMainWindow):
         elif e.key() == QtCore.Qt.Key_Return:
             self.find_object()
 
+    def getPixel(self, event):
+        x, y = event.pos().x() - self.width_map // 2, event.pos().y() - self.height_map // 2
+        x = self.maps_api.coords[0] + 0.000010688212998736789 * x * 2 ** (17 - self.maps_api.delta)
+        y = self.maps_api.coords[1] - 0.000007988506000377322 * y * 2 ** (17 - self.maps_api.delta)
+        self.maps_api.point = ','.join([str(x), str(y), 'flag'])
+        self.find_point()
+        self.update_image()
+
     def update_image(self):
         map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
         self.label.setPixmap((QPixmap.fromImage(map_image)))
@@ -70,6 +79,15 @@ class MyWidget(QMainWindow):
             else:
                 self.address.setText(self.maps_api.address)
 
+    def find_point(self):
+        self.maps_api.find_point()
+        self.find_text.setText('')
+        self.update_image()
+        if self.postal_code_button.isChecked():
+            self.address.setText(', '.join([self.maps_api.address, self.maps_api.postal_code]))
+        else:
+            self.address.setText(self.maps_api.address)
+
     def cancel_find(self):
         self.maps_api.point = ''
         self.update_image()
@@ -77,11 +95,10 @@ class MyWidget(QMainWindow):
         self.find_text.setText('')
 
     def postal_code(self):
-        if self.find_text.text():
-            if self.postal_code_button.isChecked():
-                self.address.setText(', '.join([self.maps_api.address, self.maps_api.postal_code]))
-            else:
-                self.address.setText(self.maps_api.address)
+        if self.postal_code_button.isChecked():
+            self.address.setText(', '.join([self.maps_api.address, self.maps_api.postal_code]))
+        else:
+            self.address.setText(self.maps_api.address)
 
 
 app = QApplication(sys.argv)
