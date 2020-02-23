@@ -15,10 +15,6 @@ class MyWidget(QMainWindow):
         self.update_image()
         self.label.resize(650, 450)
         self.label.move(0, 0)
-        self.button_map.setChecked(True)
-        self.button_map.clicked.connect(self.change_mapstyle)
-        self.button_sat.clicked.connect(self.change_mapstyle)
-        self.button_sklsat.clicked.connect(self.change_mapstyle)
 
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_PageUp:
@@ -43,15 +39,6 @@ class MyWidget(QMainWindow):
     def update_image(self):
         map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
         self.label.setPixmap((QPixmap.fromImage(map_image)))
-
-    def change_mapstyle(self):
-        if self.button_map.isChecked() is True:
-            self.maps_api.mapstyle = 'map'
-        elif self.button_sat.isChecked() is True:
-            self.maps_api.mapstyle = 'sat'
-        elif self.button_sklsat.isChecked() is True:
-            self.maps_api.mapstyle = 'sat,skl'
-        self.update_image()
 
 
 app = QApplication(sys.argv)

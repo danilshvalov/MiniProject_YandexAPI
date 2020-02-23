@@ -7,7 +7,6 @@ class Maps:
     def __init__(self):
         self.width_map, self.height_map = 650, 450
         self.toponym_to_find = "Владивосток"
-        self.mapstyle = 'map'
         self.delta = 17
         self.find_coords()
         self.image_map()
@@ -29,7 +28,7 @@ class Maps:
         map_params = {
             "ll": ','.join([str(self.coords[0]), str(self.coords[1])]),
             "z": str(self.delta),
-            "l": self.mapstyle,
+            "l": "sat",
             'size': f'{self.width_map},{self.height_map}'
         }
         response_api = requests.get(map_api_server, params=map_params)
@@ -43,10 +42,10 @@ class Maps:
         elif way == "pg_down" and self.delta != 0:
             self.delta -= 1
         elif way == 'up':
-            self.coords[1] = self.coords[1] + 0.00001 * self.height_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
+            self.coords[1] = self.coords[1] + 0.000007988506000377322 * self.height_map * 2 ** (17 - self.delta)
         elif way == 'down':
-            self.coords[1] = self.coords[1] - 0.00001 * self.height_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
+            self.coords[1] = self.coords[1] - 0.000007988506000377322 * self.height_map * 2 ** (17 - self.delta)
         elif way == 'right':
-            self.coords[0] = self.coords[0] + 0.00001 * self.width_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
+            self.coords[0] = self.coords[0] + 0.000010688212998736789 * self.width_map * 2 ** (17 - self.delta)
         elif way == 'left':
-            self.coords[0] = self.coords[0] - 0.00001 * self.width_map * 3.5 * 0.2 * 2 ** (17 - self.delta)
+            self.coords[0] = self.coords[0] - 0.000010688212998736789 * self.width_map * 2 ** (17 - self.delta)
