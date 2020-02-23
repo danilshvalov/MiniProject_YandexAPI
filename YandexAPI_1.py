@@ -50,12 +50,13 @@ class MyWidget(QMainWindow):
             self.find_object()
 
     def getPixel(self, event):
-        x, y = event.pos().x() - self.width_map // 2, event.pos().y() - self.height_map // 2
-        x = self.maps_api.coords[0] + 0.000010688212998736789 * x * 2 ** (17 - self.maps_api.delta)
-        y = self.maps_api.coords[1] - 0.000007988506000377322 * y * 2 ** (17 - self.maps_api.delta)
-        self.maps_api.point = ','.join([str(x), str(y), 'flag'])
-        self.find_point()
-        self.update_image()
+        if event.button() == QtCore.Qt.LeftButton:
+            x, y = event.pos().x() - self.width_map // 2, event.pos().y() - self.height_map // 2
+            x = self.maps_api.coords[0] + 0.000010688212998736789 * x * 2 ** (17 - self.maps_api.delta)
+            y = self.maps_api.coords[1] - 0.000007988506000377322 * y * 2 ** (17 - self.maps_api.delta)
+            self.maps_api.point = ','.join([str(x), str(y), 'flag'])
+            self.find_point()
+            self.update_image()
 
     def update_image(self):
         map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
