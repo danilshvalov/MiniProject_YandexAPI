@@ -13,6 +13,9 @@ class MyWidget(QMainWindow):
         self.setGeometry(100, 100, self.width_map, self.height_map + 120)
         self.maps_api = Maps()
         self.update_image()
+        self.initUI()
+
+    def initUI(self):
         self.label.resize(650, 450)
         self.label.move(0, 0)
         self.button_map.setChecked(True)
@@ -42,17 +45,19 @@ class MyWidget(QMainWindow):
         elif e.key() == QtCore.Qt.Key_A:
             self.maps_api.map_moving("left")
             self.update_image()
+        elif e.key() == QtCore.Qt.Key_Return:
+            self.find_object()
 
     def update_image(self):
         map_image = QImage(self.maps_api.image_map(), self.width_map, self.height_map, QImage.Format_RGBX8888)
         self.label.setPixmap((QPixmap.fromImage(map_image)))
 
     def change_mapstyle(self):
-        if self.button_map.isChecked() is True:
+        if self.button_map.isChecked():
             self.maps_api.mapstyle = 'map'
-        elif self.button_sat.isChecked() is True:
+        elif self.button_sat.isChecked():
             self.maps_api.mapstyle = 'sat'
-        elif self.button_sklsat.isChecked() is True:
+        elif self.button_sklsat.isChecked():
             self.maps_api.mapstyle = 'sat,skl'
         self.update_image()
 
@@ -60,7 +65,7 @@ class MyWidget(QMainWindow):
         if self.find_text.text():
             self.maps_api.find_object(self.find_text.text())
             self.update_image()
-            if self.postal_code_button.isChecked() is True:
+            if self.postal_code_button.isChecked():
                 self.address.setText(', '.join([self.maps_api.address, self.maps_api.postal_code]))
             else:
                 self.address.setText(self.maps_api.address)
@@ -69,10 +74,11 @@ class MyWidget(QMainWindow):
         self.maps_api.point = ''
         self.update_image()
         self.address.setText('')
+        self.find_text.setText('')
 
     def postal_code(self):
         if self.find_text.text():
-            if self.postal_code_button.isChecked() is True:
+            if self.postal_code_button.isChecked():
                 self.address.setText(', '.join([self.maps_api.address, self.maps_api.postal_code]))
             else:
                 self.address.setText(self.maps_api.address)
